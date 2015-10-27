@@ -9,27 +9,45 @@ import json "encoding/json"
 import math "math"
 
 // Reference proto, json, and math imports to suppress error if they are not otherwise used.
+
+/*防止没有到的时候编译报警*/
 var _ = proto.Marshal
 var _ = &json.SyntaxError{}
 var _ = math.Inf
 
+/*请求结构体
+*/
 type GetRequest struct {
+	/*Group是string类型的指针，后边的tag为导出protobuf时候被protobuf反射读取进行序列化和json的序列化
+	omitempty的意思为group为空不输出，json不输出XXX_unrecognized*/
 	Group            *string `protobuf:"bytes,1,req,name=group" json:"group,omitempty"`
 	Key              *string `protobuf:"bytes,2,req,name=key" json:"key,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
+/*
+ m *GetRequest 是指针传递   改变m或者m所指向的对象 就会更改调用者的值 
+ m  GetRequest 是值传递  不会更改调用者的值
+*/
 func (m *GetRequest) Reset()         { *m = GetRequest{} }
+/*
+返回protobuf字符串
+*/
 func (m *GetRequest) String() string { return proto.CompactTextString(m) }
 func (*GetRequest) ProtoMessage()    {}
 
+/*
+返回group名字，如果没有返回空字符串
+*/
 func (m *GetRequest) GetGroup() string {
 	if m != nil && m.Group != nil {
 		return *m.Group
 	}
 	return ""
 }
-
+/*
+返回key ，如果没有就返回空字符串
+*/
 func (m *GetRequest) GetKey() string {
 	if m != nil && m.Key != nil {
 		return *m.Key
@@ -37,6 +55,9 @@ func (m *GetRequest) GetKey() string {
 	return ""
 }
 
+/*
+*得到的回应包体
+*/
 type GetResponse struct {
 	Value            []byte   `protobuf:"bytes,1,opt,name=value" json:"value,omitempty"`
 	MinuteQps        *float64 `protobuf:"fixed64,2,opt,name=minute_qps" json:"minute_qps,omitempty"`
@@ -61,5 +82,6 @@ func (m *GetResponse) GetMinuteQps() float64 {
 	return 0
 }
 
+/*此包包含以后首先调用*/
 func init() {
 }
