@@ -21,6 +21,7 @@ package singleflight
 import "sync"
 
 // call is an in-flight or completed Do call
+/*存储一条命令*/
 type call struct {
 	wg  sync.WaitGroup
 	val interface{}
